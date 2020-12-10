@@ -56,3 +56,4 @@ rm -rf $RPC_DIR
 for file in $PROTO_FILES; do
     generate $(get_directory $file) $(get_proto_file $file)
 done
+echo "=========================================================="
