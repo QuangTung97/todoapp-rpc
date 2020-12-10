@@ -1,0 +1,11 @@
+syntax = "proto3";
+
+package health.v1;
+
+option go_package = "todoapp-rpc/rpc/health/v1;health";
+
+message HealthRequest {
+}
+
+message HealthResponse {
+}

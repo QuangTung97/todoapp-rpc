@@ -1,0 +1,8 @@
+syntax = "proto3";
+
+package todoapp.v1;
+
+option go_package = "todoapp-rpc/rpc/todoapp/v1;todoapp";
+
+message TodoGetRequest {
+}

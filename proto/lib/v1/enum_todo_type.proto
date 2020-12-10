@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package lib.v1;
+
+option go_package = "todoapp-rpc/rpc/lib/v1;lib";
+
+enum TodoType {
+  TODO_TYPE_UNSPECIFIED = 0;
+  TODO_TYPE_OK = 1;
+}
