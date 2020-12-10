@@ -15,11 +15,13 @@ CURRENT_DIR=$(pwd)
 PROTOC_INCLUDES=.:"$CURRENT_DIR/$PROTO_DIR":"$GRPC_GATEWAY/third_party/googleapis":"$GOGOPROTOBUF/protobuf"
 
 RED='\033[0;31m'
+ORANGE='\033[0;33m'
+GREEN='\033[0;32m'
 NO_COLOR='\033[0m'
 
 generate() {
     echo "=========================================================="
-    echo "Generate: $1/$2"
+    echo "${ORANGE}Generating: $1/$2${NO_COLOR}"
     echo "----------------------------------------------------------"
 
     mkdir -p "$RPC_DIR/$1"
@@ -33,6 +35,8 @@ generate() {
     if [ $? -ne 0 ]; then
         echo "----------------------------------------------------------"
         echo "${RED}ERROR while generating: $1/$2${NO_COLOR}"
+    else
+        echo "${GREEN}Generated $1/$2${NO_COLOR}"
     fi
 
     cd "$CURRENT_DIR"
