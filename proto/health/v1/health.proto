@@ -4,8 +4,37 @@ package health.v1;
 
 option go_package = "todoapp-rpc/rpc/health/v1;health";
 
-message HealthRequest {
+import "google/api/annotations.proto";
+
+// HealthService
+service HealthService {
+  // Live
+  rpc Live (LiveRequest) returns (LiveResponse) {
+    option (google.api.http) = {
+      get: "/health/live"
+    };
+  }
+
+  // Ready
+  rpc Ready (ReadyRequest) returns (ReadyResponse) {
+    option (google.api.http) = {
+      get: "/health/ready"
+    };
+  }
 }
 
-message HealthResponse {
+// LiveRequest
+message LiveRequest {
+}
+
+// LiveResponse
+message LiveResponse {
+}
+
+// ReadyRequest
+message ReadyRequest {
+}
+
+// ReadyResponse
+message ReadyResponse {
 }
