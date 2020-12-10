@@ -6,6 +6,6 @@ option go_package = "todoapp-rpc/rpc/todoapp/v1;todoapp";
 
 import "lib/v1/enum_todo_type.proto";
 
-message TodoGetRequest 
+message TodoGetRequest {
   lib.v1.TodoType type = 1;
 }
