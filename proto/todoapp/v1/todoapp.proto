@@ -4,8 +4,51 @@ package todoapp.v1;
 
 option go_package = "todoapp-rpc/rpc/todoapp/v1;todoapp";
 
+import "google/api/annotations.proto";
+
+import "google/protobuf/timestamp.proto";
 import "lib/v1/enum_todo_type.proto";
 
+// TodoService
+service TodoService {
+  // List
+  rpc List (TodoListRequest) returns (TodoListResponse) {
+    option (google.api.http) = {
+      get: "/todos"
+    };
+  }
+}
+
+// TodoListRequest
+message TodoListRequest {
+  // Optional
+  string query = 1;
+  // Optional
+  int64 page = 2;
+  // Optional
+  int64 page_size = 3;
+}
+
+// TodoData
+message TodoData {
+  //
+  int64 id = 1;
+  //
+  string name = 2;
+  //
+  google.protobuf.Timestamp created_at = 3;
+}
+
+// TodoListResponse
+message TodoListResponse {
+  //
+  repeated TodoData todos = 1;
+  //
+  int64 total = 2;
+}
+
+
+// TodoGetRequest
 message TodoGetRequest {
   lib.v1.TodoType type = 1;
 }
