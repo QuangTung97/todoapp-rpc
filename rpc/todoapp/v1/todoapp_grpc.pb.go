@@ -17,6 +17,8 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type TodoServiceClient interface {
+	// Save
+	Save(ctx context.Context, in *TodoSaveRequest, opts ...grpc.CallOption) (*TodoSaveResponse, error)
 	// List
 	List(ctx context.Context, in *TodoListRequest, opts ...grpc.CallOption) (*TodoListResponse, error)
 }
@@ -27,6 +29,15 @@ type todoServiceClient struct {
 
 func NewTodoServiceClient(cc grpc.ClientConnInterface) TodoServiceClient {
 	return &todoServiceClient{cc}
+}
+
+func (c *todoServiceClient) Save(ctx context.Context, in *TodoSaveRequest, opts ...grpc.CallOption) (*TodoSaveResponse, error) {
+	out := new(TodoSaveResponse)
+	err := c.cc.Invoke(ctx, "/todoapp.v1.TodoService/Save", in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
 }
 
 func (c *todoServiceClient) List(ctx context.Context, in *TodoListRequest, opts ...grpc.CallOption) (*TodoListResponse, error) {
@@ -42,6 +53,8 @@ func (c *todoServiceClient) List(ctx context.Context, in *TodoListRequest, opts 
 // All implementations must embed UnimplementedTodoServiceServer
 // for forward compatibility
 type TodoServiceServer interface {
+	// Save
+	Save(context.Context, *TodoSaveRequest) (*TodoSaveResponse, error)
 	// List
 	List(context.Context, *TodoListRequest) (*TodoListResponse, error)
 	mustEmbedUnimplementedTodoServiceServer()
@@ -51,6 +64,9 @@ type TodoServiceServer interface {
 type UnimplementedTodoServiceServer struct {
 }
 
+func (UnimplementedTodoServiceServer) Save(context.Context, *TodoSaveRequest) (*TodoSaveResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Save not implemented")
+}
 func (UnimplementedTodoServiceServer) List(context.Context, *TodoListRequest) (*TodoListResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method List not implemented")
 }
@@ -65,6 +81,24 @@ type UnsafeTodoServiceServer interface {
 
 func RegisterTodoServiceServer(s grpc.ServiceRegistrar, srv TodoServiceServer) {
 	s.RegisterService(&_TodoService_serviceDesc, srv)
+}
+
+func _TodoService_Save_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(TodoSaveRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(TodoServiceServer).Save(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: "/todoapp.v1.TodoService/Save",
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(TodoServiceServer).Save(ctx, req.(*TodoSaveRequest))
+	}
+	return interceptor(ctx, in, info, handler)
 }
 
 func _TodoService_List_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
@@ -89,6 +123,10 @@ var _TodoService_serviceDesc = grpc.ServiceDesc{
 	ServiceName: "todoapp.v1.TodoService",
 	HandlerType: (*TodoServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
+		{
+			MethodName: "Save",
+			Handler:    _TodoService_Save_Handler,
+		},
 		{
 			MethodName: "List",
 			Handler:    _TodoService_List_Handler,

@@ -32,7 +32,7 @@ generate() {
         echo "----------------------------------------------------------"
         echo "${RED}ERROR while generating: $1/$2${NO_COLOR}"
     else
-        echo "${GREEN}Generated $1/$2${NO_COLOR}"
+        echo "${GREEN}Generated: $1/$2${NO_COLOR}"
     fi
 
     cd "$CURRENT_DIR"

@@ -11,6 +11,13 @@ import "lib/v1/enum_todo_type.proto";
 
 // TodoService
 service TodoService {
+  // Save
+  rpc Save (TodoSaveRequest) returns (TodoSaveResponse) {
+    option (google.api.http) = {
+      post: "/todos"
+      body: "*"
+    };
+  }
   // List
   rpc List (TodoListRequest) returns (TodoListResponse) {
     option (google.api.http) = {
@@ -51,4 +58,28 @@ message TodoListResponse {
 // TodoGetRequest
 message TodoGetRequest {
   lib.v1.TodoType type = 1;
+}
+
+// TodoItem
+message TodoItem {
+  // Optional
+  int64 id = 1;
+  // Required
+  string name = 2;
+}
+
+// TodoSaveRequest
+message TodoSaveRequest {
+  // Optional
+  int64 id = 1;
+  // Required
+  string name = 2;
+  // Required
+  repeated TodoItem items = 3;
+}
+
+// TodoSaveResponse
+message TodoSaveResponse {
+  //
+  int64 id = 1;
 }
