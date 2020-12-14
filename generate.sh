@@ -1,18 +1,11 @@
 PROTO_DIR=proto
 RPC_DIR=rpc
 
-GRPC_GATEWAY="$(go list -m -f "{{.Dir}}" github.com/grpc-ecosystem/grpc-gateway)"
-GOGOPROTOBUF="$(go list -m -f "{{.Dir}}" github.com/gogo/protobuf)"
-
-M_OPTIONS=Mgoogle/protobuf/any.proto=github.com/gogo/protobuf/types,\
-Mgoogle/protobuf/duration.proto=github.com/gogo/protobuf/types,\
-Mgoogle/protobuf/struct.proto=github.com/gogo/protobuf/types,\
-Mgoogle/protobuf/timestamp.proto=github.com/gogo/protobuf/types,\
-Mgoogle/protobuf/wrappers.proto=github.com/gogo/protobuf/types
+GRPC_GATEWAY="$(go list -m -f "{{.Dir}}" github.com/grpc-ecosystem/grpc-gateway/v2)"
 
 CURRENT_DIR=$(pwd)
 
-PROTOC_INCLUDES=.:"$CURRENT_DIR/$PROTO_DIR":"$GRPC_GATEWAY/third_party/googleapis":"$GOGOPROTOBUF/protobuf"
+PROTOC_INCLUDES=.:"$CURRENT_DIR/$PROTO_DIR":"$GRPC_GATEWAY/third_party/googleapis"
 
 RED='\033[0;31m'
 ORANGE='\033[0;33m'
@@ -28,8 +21,8 @@ generate() {
     cd "$CURRENT_DIR/$PROTO_DIR/$1"
 
     protoc -I$PROTOC_INCLUDES \
-        --gofast_out=paths=source_relative,$M_OPTIONS:"$CURRENT_DIR/$RPC_DIR/$1" \
-        --go-grpc_out=paths=source_relative,$M_OPTIONS:"$CURRENT_DIR/$RPC_DIR/$1" \
+        --go_out=paths=source_relative:"$CURRENT_DIR/$RPC_DIR/$1" \
+        --go-grpc_out=paths=source_relative:"$CURRENT_DIR/$RPC_DIR/$1" \
         --grpc-gateway_out=logtostderr=true,paths=source_relative:"$CURRENT_DIR/$RPC_DIR/$1" \
         $2
     if [ $? -ne 0 ]; then

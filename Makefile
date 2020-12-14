@@ -4,6 +4,6 @@ generate:
 	@./generate.sh
 
 install-tools:
-	go install github.com/gogo/protobuf/protoc-gen-gofast
+	go install google.golang.org/protobuf/cmd/protoc-gen-go
 	go install google.golang.org/grpc/cmd/protoc-gen-go-grpc
-	go install github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway
+	go install github.com/grpc-ecosystem/grpc-gateway/v2/protoc-gen-grpc-gateway
