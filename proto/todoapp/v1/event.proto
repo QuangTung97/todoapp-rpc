@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package todoapp.v1;
+
+option go_package = "todoapp-rpc/rpc/todoapp/v1;todoapp";
+
+import "google/api/annotations.proto";
+
+import "google/protobuf/timestamp.proto";
+
+// EventService
+service EventService {
+  // Signal
+  rpc Signal (SignalRequest) returns (SignalResponse) {
+    option (google.api.http) = {
+      post: "/events/signal"
+      body: "*"
+    };
+  }
+}
+
+// SignalRequest
+message SignalRequest {
+}
+
+// SignalResponse
+message SignalResponse {
+}
+
+// TodoEventType 
+enum EventType {
+  // EVENT_TYPE_UNSPECIFIED
+  EVENT_TYPE_UNSPECIFIED = 0;
+  // EVENT_TYPE_TODO_SAVE
+  EVENT_TYPE_TODO_SAVE = 1;
+}
+
+// Event
+message Event {
+  // Required
+  EventType type = 1;
+  // Required
+  google.protobuf.Timestamp timestamp = 2;
+  // Optional
+  EventTodoSave todo_save = 3;
+}
+
+message EventTodoItemData {
+  //
+  uint64 id = 1;
+  //
+  string name = 2;
+  //
+  google.protobuf.Timestamp created_at = 3;
+  //
+  google.protobuf.Timestamp updated_at = 4;
+}
+
+// EventTodoSave
+message EventTodoSave {
+  //
+  uint64 id = 1;
+  //
+  string name = 2;
+  //
+  google.protobuf.Timestamp created_at = 3;
+  //
+  google.protobuf.Timestamp updated_at = 4;
+  //
+  repeated EventTodoItemData items = 5;
+}
